@@ -1,8 +1,10 @@
 package com.dmitrybondarev.twidder.controller;
 
 import com.dmitrybondarev.twidder.domain.Message;
+import com.dmitrybondarev.twidder.domain.User;
 import com.dmitrybondarev.twidder.repo.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,10 +33,12 @@ public class MainController {
     }
 
     @PostMapping("/main")
-    public String add(@RequestParam String text,
-                      @RequestParam String tag,
-                      Map<String, Object> model) {
-        Message message = new Message(text, tag);
+    public String add(
+            @AuthenticationPrincipal User user,
+            @RequestParam String text,
+            @RequestParam String tag,
+            Map<String, Object> model) {
+        Message message = new Message(text, tag, user);
 
         messageRepo.save(message);
 
@@ -46,8 +50,9 @@ public class MainController {
     }
 
     @PostMapping("filter")
-    public String filter(@RequestParam String filter,
-                         Map<String, Object> model) {
+    public String filter(
+            @RequestParam String filter,
+            Map<String, Object> model) {
         Iterable<Message> messages;
 
         if (filter != null && !filter.isEmpty()) {
