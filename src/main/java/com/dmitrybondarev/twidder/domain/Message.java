@@ -23,10 +23,13 @@ public class Message {
 
     private String tag;
 
+    private String filename;
+
     public Message() {
     }
 
     public Message(String text, String tag, User user) {
+        this.author = user;
         this.text = text;
         this.tag = tag;
     }
@@ -64,6 +67,14 @@ public class Message {
     }
 
     public String getAuthorName() {
-        return author != null ? author.getUsername() : "<none>";
+        return author != null ? author.getUsername() : "<no1ne>";
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }
